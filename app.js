@@ -19,7 +19,6 @@ const store = new MongoDBStore({
   collection: 'sessions'
 });
 const csrfProtection = csrf();
-app.use(flash());
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -39,6 +38,7 @@ app.use(
   })
 );
 app.use(csrfProtection);
+app.use(flash());
 
 app.use((req, res, next) => {
   res.locals.isAuthenticated = req.session.isLoggedIn;
@@ -47,6 +47,7 @@ app.use((req, res, next) => {
 });
 
 app.use((req, res, next) => {
+  // throw new Error('Sync Dummy');
   if (!req.session.user) {
     return next();
   }
@@ -73,7 +74,7 @@ app.use(errorController.get404);
 
 app.use((error, req, res, next) => { 
   // res.redirect('/500');
-  res.status(500).render('505', {
+  res.status(500).render('500', {
     pageTitle: 'Error!',
     path: '/500',
     isAuthenticated: req.session.isLoggedIn
